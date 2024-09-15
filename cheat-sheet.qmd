@@ -1,0 +1,47 @@
+---
+title: "Cheat sheets"
+format: html
+editor: visual
+toc: true
+---
+
+## Introduction
+
+I don't code often enough now to remember cool little tricks that make code both readable and elegant, and when I dip my toes back in, I can get frustrated I'm not working as quickly as I ought to, or fall back on writing lengthy code to brute force. This note is a place to record some of the common operations I might need to do, particularly in the tidyverse, which has changed quite a bit from when I used to use it more regularly - so don't judge me, please!
+
+### Formatting columns using mutate, across, and scales::label_comma (or similar)
+
+Problem: There are multiple columns in a dataframe I want to format in the same way using scales::label\_\*. How can I do this without writing multiple lines within a mutate function call? I would have used mutate_at, but that's superceded.
+
+Solution: Use mutate, and across.
+
+Found on <https://stackoverflow.com/questions/72533524/format-all-numeric-columns-with-comma-to-seprate-the-v>
+
+As noted by the top answer:
+
+> You can use the `scales::label_comma()` function. Note that the format for using this is `scales::label_comma()(x)` since a label function is generated *and then* you call it on your numerical vector.
+
+```{r}
+library(dplyr)
+
+df <- tibble(
+  Customers = c("babs", "bobs", "pint", "red", "yellow"),
+  telex = c(3434323424, 53545322, 43, 35435, 4567),
+  manay = c(937387573, 758464938, 7453537384, 624353, 44),
+  players = c(96222221, 122134, 223444, 345654, 334)
+)
+df
+
+df_with_comma <- df |> 
+  mutate(across(telex:players, scales::label_comma()))
+df_with_comma
+
+# Pass arguments into the label_comma() function to adjust the presentation:
+df_with_comma <- df |> 
+  mutate(across(telex:players, scales::label_comma(prefix = "🥝", suffix = "🥝")))
+df_with_comma
+
+
+```
+
+## 
