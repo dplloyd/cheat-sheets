@@ -44,4 +44,28 @@ df_with_comma
 
 ```
 
-## 
+## Colour ramping
+
+As taken from Rosa Alonso's analysis
+
+```{r}
+my_colours9 <- PrettyCols::prettycols("Coast",
+                                      n = 9, # replace with the number of groups in your data
+                                      type = 'continuous',
+                                      direction = 1) # '1' makes blue first, '-1' makes red first
+
+my_colours6 <- PrettyCols::prettycols("Coast",
+                                     n = 6, # replace with the number of groups in your data
+                                     type = 'continuous',
+                                     direction = 1) # '1' makes blue first, '-1' makes red first
+
+my_colours8 <- PrettyCols::prettycols("Coast",
+                                     n = 8, # replace with the number of groups in your data
+                                     type = 'continuous',
+                                     direction = 1) # '1' makes blue first, '-1' makes red first
+
+my_colours2 <- PrettyCols::prettycols("Coast",
+                                      n = 2, # replace with the number of groups in your data
+                                      type = 'continuous',
+                                      direction = 1) # '1' makes blue first, '-1' makes red first
+```
