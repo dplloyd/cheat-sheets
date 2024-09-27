@@ -22,7 +22,7 @@ As noted by the top answer:
 > You can use the `scales::label_comma()` function. Note that the format for using this is `scales::label_comma()(x)` since a label function is generated *and then* you call it on your numerical vector.
 
 ```{r}
-library(dplyr)
+library(tidyverse)
 
 df <- tibble(
   Customers = c("babs", "bobs", "pint", "red", "yellow"),
@@ -68,4 +68,31 @@ my_colours2 <- PrettyCols::prettycols("Coast",
                                       n = 2, # replace with the number of groups in your data
                                       type = 'continuous',
                                       direction = 1) # '1' makes blue first, '-1' makes red first
+```
+
+## Using lapply and map
+
+With thanks to Martin Ingram for the below.
+
+You can sometimes replace get() with {{}}, but I don't yet understand when it works and when it doesn't.
+
+```{r}
+my_function <- function(df, var){
+    
+    temp <- df |> 
+        mutate(transformed = get(var) * 2)
+    
+    return(temp)
+}
+
+
+list_of_vars <- list("speed", 'dist')
+
+# lapply
+output <- lapply(X = list_of_vars,
+       FUN = my_function,
+       df = cars)
+
+# map
+output2 <- map(.x = list_of_vars, .f = my_function, df = cars)
 ```
