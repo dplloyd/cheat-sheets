@@ -100,13 +100,15 @@ output2 <- map(.x = list_of_vars, .f = my_function, df = cars)
 ### More complex example using lapply and map
 
 ```{r}
-my_more_complex_function <- function(df, var_group, var_sum){
+my_more_complex_function <- function(df, var_group, vars_to_sum){
     
     temp <- df |> 
-        group_by(get(var_group)) |> 
-        summarise(sum_value = sum(get(var_sum),
-                                  na.rm = TRUE)) |> 
-        mutate(Cluster_Group = var_group)
+        group_by(Group = get(var_group)) |> 
+        summarise(across(all_of(vars_to_sum),  
+                         \(x) sum(x,
+                                  na.rm = TRUE),
+                         .names = "sum_{.col}")) |> 
+        mutate(Cluster_Group = var_group, .before = 1)
     
     return(temp)
 }
@@ -114,15 +116,19 @@ my_more_complex_function <- function(df, var_group, var_sum){
 
 list_of_vars_groups <- list("species", 'island', 'sex')
 
+list_of_vars_sum <- c("bill_length_mm",
+                      "bill_depth_mm", 
+                      "flipper_length_mm")
+
 output3 <- lapply(X = list_of_vars_groups,
                  FUN = my_more_complex_function,
                  df = palmerpenguins::penguins, 
-                 var_sum = "bill_length_mm")
+                 vars_to_sum = list_of_vars_sum)
 
 output4 <- map(.x = list_of_vars_groups, 
                .f = my_more_complex_function,
                df = palmerpenguins::penguins,
-               var_sum = "bill_length_mm")
+               vars_to_sum = list_of_vars_sum)
 
 
 # collapsing to df
